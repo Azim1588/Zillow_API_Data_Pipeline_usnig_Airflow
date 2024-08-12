@@ -55,6 +55,13 @@ Before you begin, ensure you have met the following requirements:
 
 Create a configuration file (`config_api.json`) to store your Zillow API credentials and other necessary headers.
 
+```json
+{
+  "x-rapidapi-host": "zillow56.p.rapidapi.com",
+  "x-rapidapi-key": "YOUR_API_KEY"
+}
+```
+
 ### S3 Bucket Configuration:
 
 Set up an S3 bucket where the CSV files will be stored. Update the DAG to point to the correct bucket.
