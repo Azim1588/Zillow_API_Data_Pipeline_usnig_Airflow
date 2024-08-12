@@ -11,9 +11,7 @@ This project is a data pipeline that extracts real estate data from the Zillow A
 - [Configuration](#configuration)
 - [Usage](#usage)
 - [Airflow DAG Details](#airflow-dag-details)
-- [License](#license)
-- [Contributing](#contributing)
-- [Contact](#contact)
+
 
 ## Introduction
 
@@ -63,3 +61,75 @@ Create a configuration file (`config_api.json`) to store your Zillow API credent
   "x-rapidapi-key": "YOUR_API_KEY"
 }
 
+
+
+### S3 Bucket Configuration:
+
+Set up an S3 bucket where the CSV files will be stored. Update the DAG to point to the correct bucket.
+
+## Usage
+
+### Start Airflow:
+
+- Ensure that the Airflow web server and scheduler are running.
+
+### Trigger the DAG:
+
+- You can manually trigger the DAG from the Airflow UI or set it to run on the defined schedule (`@daily` by default).
+
+### Monitor the Pipeline:
+
+- Use the Airflow UI to monitor the execution of the DAG, check logs, and view the status of each task.
+
+## Airflow DAG Details
+
+### Tasks
+
+- **Extract Zillow Data**:
+  - **Task ID**: `tsk_extract_zillow_data_var`
+  - **Description**: Fetches real estate data from the Zillow API and saves it as a JSON file.
+
+- **Transform JSON to CSV**:
+  - **Task ID**: `tsk_json_to_csv_var`
+  - **Description**: Converts the extracted JSON data into CSV format.
+
+- **Upload to S3**:
+  - **Task ID**: `tsk_load_to_s3`
+  - **Description**: Uploads the transformed CSV file to the specified S3 bucket.
+
+### DAG Configuration
+
+```python
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2023, 8, 10),
+    'email': ['your.email@example.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 2,
+    'retry_delay': timedelta(seconds=15)
+}
+
+with DAG('zillow_dag',
+         default_args=default_args,
+         schedule_interval='@daily',
+         catchup=False) as dag:
+    ...
+
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2023, 8, 10),
+    'email': ['your.email@example.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 2,
+    'retry_delay': timedelta(seconds=15)
+}
+
+with DAG('zillow_dag',
+         default_args=default_args,
+         schedule_interval='@daily',
+         catchup=False) as dag:
+    ...
