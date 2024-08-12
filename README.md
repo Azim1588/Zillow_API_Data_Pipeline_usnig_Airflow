@@ -26,7 +26,7 @@ The data pipeline consists of the following steps:
 3. **Load**: The transformed CSV data is uploaded to an AWS S3 bucket.
 4. **Orchestration**: Apache Airflow orchestrates the entire process.
 
-![Pipeline Architecture](./assets/architecture_diagram.png)
+![Pipeline Architecture](https://github.com/Azim1588/Zillow_API_Data_Pipeline_usnig_Airflow/blob/main/Zillow%20API%20Data%20Pipeline/image/architecture.png?raw=true)
 
 ## Prerequisites
 
