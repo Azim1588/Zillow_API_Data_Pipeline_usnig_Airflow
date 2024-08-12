@@ -46,52 +46,77 @@ Before you begin, ensure you have met the following requirements:
    git clone https://github.com/Azim1588/zillow-data-pipeline.git
    cd zillow-data-pipeline
 
-##Set up Airflow:
+## Set up Airflow:
 
-Ensure that Airflow is correctly installed and configured.
-Place the DAG file (zillow_dag.py) in your Airflow dags/ directory.
-Configuration
-Zillow API Configuration:
-Create a configuration file (config_api.json) to store your Zillow API credentials and other necessary headers.
+- Ensure that Airflow is correctly installed and configured.
+- Place the DAG file (`zillow_dag.py`) in your Airflow `dags/` directory.
 
-json
+## Configuration
 
+### Zillow API Configuration:
+
+Create a configuration file (`config_api.json`) to store your Zillow API credentials and other necessary headers.
+
+```json
 {
   "x-rapidapi-host": "zillow56.p.rapidapi.com",
   "x-rapidapi-key": "YOUR_API_KEY"
 }
-Place this file in a directory accessible to the DAG, e.g., /home/ubuntu/airflow/.
 
-S3 Bucket Configuration:
+### S3 Bucket Configuration:
+
 Set up an S3 bucket where the CSV files will be stored. Update the DAG to point to the correct bucket.
 
-Usage
-Start Airflow:
+## Usage
 
-Ensure that the Airflow web server and scheduler are running.
-Trigger the DAG:
+### Start Airflow:
 
-You can manually trigger the DAG from the Airflow UI or set it to run on the defined schedule (@daily by default).
-Monitor the Pipeline:
+- Ensure that the Airflow web server and scheduler are running.
 
-Use the Airflow UI to monitor the execution of the DAG, check logs, and view the status of each task.
-Airflow DAG Details
-Tasks
-Extract Zillow Data:
+### Trigger the DAG:
 
-Task ID: tsk_extract_zillow_data_var
-Description: Fetches real estate data from the Zillow API and saves it as a JSON file.
-Transform JSON to CSV:
+- You can manually trigger the DAG from the Airflow UI or set it to run on the defined schedule (`@daily` by default).
 
-Task ID: tsk_json_to_csv_var
-Description: Converts the extracted JSON data into CSV format.
-Upload to S3:
+### Monitor the Pipeline:
 
-Task ID: tsk_load_to_s3
-Description: Uploads the transformed CSV file to the specified S3 bucket.
-DAG Configuration
-python
-Copy code
+- Use the Airflow UI to monitor the execution of the DAG, check logs, and view the status of each task.
+
+## Airflow DAG Details
+
+### Tasks
+
+- **Extract Zillow Data**:
+  - **Task ID**: `tsk_extract_zillow_data_var`
+  - **Description**: Fetches real estate data from the Zillow API and saves it as a JSON file.
+
+- **Transform JSON to CSV**:
+  - **Task ID**: `tsk_json_to_csv_var`
+  - **Description**: Converts the extracted JSON data into CSV format.
+
+- **Upload to S3**:
+  - **Task ID**: `tsk_load_to_s3`
+  - **Description**: Uploads the transformed CSV file to the specified S3 bucket.
+
+### DAG Configuration
+
+```python
+default_args = {
+    'owner': 'airflow',
+    'depends_on_past': False,
+    'start_date': datetime(2023, 8, 10),
+    'email': ['your.email@example.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 2,
+    'retry_delay': timedelta(seconds=15)
+}
+
+with DAG('zillow_dag',
+         default_args=default_args,
+         schedule_interval='@daily',
+         catchup=False) as dag:
+    ...
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
