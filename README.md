@@ -102,7 +102,7 @@ Set up an S3 bucket where the CSV files will be stored. Update the DAG to point 
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2023, 8, 10),
+    'start_date': datetime(2024, 8, 10),
     'email': ['your.email@example.com'],
     'email_on_failure': True,
     'email_on_retry': False,
@@ -119,7 +119,7 @@ with DAG('zillow_dag',
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2023, 8, 10),
+    'start_date': datetime(2024, 8, 10),
     'email': ['your.email@example.com'],
     'email_on_failure': True,
     'email_on_retry': False,
